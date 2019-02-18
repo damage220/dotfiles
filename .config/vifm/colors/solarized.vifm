@@ -1,0 +1,27 @@
+" solarized
+hi clear
+
+hi Win ctermfg=none ctermbg=none cterm=none
+hi Border ctermfg=none ctermbg=none cterm=none
+hi SuggestBox ctermfg=none ctermbg=none cterm=none
+hi Directory ctermfg=4 ctermbg=none cterm=none
+hi Link ctermfg=none ctermbg=none cterm=none
+hi BrokenLink ctermfg=9 ctermbg=none cterm=none
+hi Socket ctermfg=none ctermbg=none cterm=none
+hi Device ctermfg=none ctermbg=none cterm=none
+hi Fifo ctermfg=none ctermbg=none cterm=none
+hi Executable ctermfg=3 ctermbg=none cterm=none
+hi Selected ctermfg=none ctermbg=0 cterm=bold
+hi CurrLine ctermfg=none ctermbg=none cterm=bold,reverse
+hi TopLine ctermfg=none ctermbg=none cterm=none
+hi TopLineSel ctermfg=4 ctermbg=none cterm=none
+hi StatusLine ctermfg=none ctermbg=none cterm=none
+hi WildMenu ctermfg=4 ctermbg=none cterm=none
+hi CmdLine ctermfg=none ctermbg=none cterm=none
+hi ErrorMsg ctermfg=none ctermbg=none cterm=none
+hi JobLine ctermfg=none ctermbg=none cterm=none
+hi CmpMismatch ctermfg=none ctermbg=none cterm=none
+
+" file highlighting
+hi /^.*\.(mkv|avi)$/ ctermfg=2 ctermbg=none cterm=none
+hi /^.*\.(png|jpe?g|gif)$/ ctermfg=2 ctermbg=none cterm=none

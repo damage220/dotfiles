@@ -1,0 +1,36 @@
+#!/bin/bash
+
+PATH_SCREENSHOTS="$HOME/img/screenshots"
+SOUND_VOLUME_CHANGE="/usr/share/sounds/freedesktop/stereo/audio-volume-change.oga"
+SOUND_SCREENSHOT="/usr/share/sounds/freedesktop/stereo/camera-shutter.oga"
+
+getVolume()
+{
+	amixer get Master | grep -Po -m1 '[0-9]+(?=%)'
+}
+
+setVolume()
+{
+	pactl set-sink-volume @DEFAULT_SINK@ "$1%" \
+		&& desktop updatestatusline \
+		&& play $SOUND_VOLUME_CHANGE
+}
+
+makeScreenshot()
+{
+	[ -d "$PATH_SCREENSHOTS" ] || mkdir --parents $PATH_SCREENSHOTS
+
+	import "$@" "$PATH_SCREENSHOTS/$(date +%Y-%m-%d_%H:%M:%S).png"
+
+	notify-send "Captured" "Saved to ${PATH_SCREENSHOTS/#$HOME/'~'}" \
+		&& play $SOUND_SCREENSHOT
+}
+
+case $1 in
+	"updatestatusline") xsetroot -name "  [$(getVolume)%] $(date +"%a, %-d %b %I:%M %p") ";;
+	"volume_set") setVolume $2;;
+	"volume_increase") [ $(getVolume) -lt 150 ] && setVolume +10;;
+	"volume_decrease") [ $(getVolume) -gt 0 ] && setVolume -10;;
+	"screenshot_root") makeScreenshot -window root;;
+	"screenshot_window") makeScreenshot;;
+esac

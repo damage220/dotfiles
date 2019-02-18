@@ -1,0 +1,74 @@
+" sensible
+set syscalls
+set timefmt=%m/%d\ %H:%M
+set nolaststatus
+set histcursor=direnter
+set confirm=permdelete
+set dirsize=nitems
+set dotdirs=
+set vifminfo=chistory,shistory
+set history=100
+set viewcolumns
+set wildmenu
+set nofollowlinks
+set scrolloff=0
+set undolevels=0
+set vicmd=nvim\ -p
+
+" show only one pane
+only
+
+" colors
+colorscheme solarized
+
+" default applications
+filetype <image/*> feh --start-at %f &
+filetype <video/*> mpv --pause --fullscreen %f &
+filetype <audio/*> mplayer %f
+
+" bookmarks
+mark v ~/.vim
+mark d ~/dev/dwm
+mark s ~/dev/st
+mark f ~/.config/vifm
+mark t ~/tmp
+mark w /mnt/windows
+mark m /mnt/windows/data/movies
+
+" go to home
+nnoremap <silent>~ :cd ~<CR>
+
+" fast navigation
+noremap J 5j
+noremap K 5k
+
+" start shell in current directory
+nnoremap <silent>! :shell<CR>
+
+" display sorting dialog
+nnoremap <silent>s :sort<CR>
+
+" renaming
+nnoremap I cw<Home>
+nnoremap A cw
+nnoremap cw cw<C-U>
+nnoremap ciw cw<C-U>
+
+" invert selection
+nnoremap <silent>i :invert s<CR>
+
+" toggle tree view
+nnoremap <silent><space> :tree!<CR>
+
+" update config on the fly
+nnoremap <silent>,c :write | edit $MYVIFMRC | restart<CR>
+
+" disable undo/redo
+noremap <C-R> <nop>
+noremap u <nop>
+
+" archiving
+command! compress !!atool --add %a %f
+command! extract !!atool --extract %c
+nnoremap ac :compress<space>
+nnoremap <silent>ae :extract<CR>

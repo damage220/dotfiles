@@ -1,0 +1,23 @@
+"desktop volume_set 100"
+Control+0
+
+"desktop volume_increase"
+Control+equal
+
+"desktop volume_decrease"
+Control+minus
+
+"desktop screenshot_root"
+Print
+
+"desktop screenshot_window"
+Mod4+Print
+
+"gnome-system-monitor"
+Mod4+r
+
+"gcolor3"
+Mod4+p
+
+"sleep 0.1 && xset dpms force off"
+Mod4+s

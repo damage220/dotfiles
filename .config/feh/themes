@@ -1,0 +1,4 @@
+feh --no-menus \
+--fullscreen \
+--quiet \
+--scale-down

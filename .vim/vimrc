@@ -1,0 +1,166 @@
+" [mattn/emmet-vim] useful completion for html
+autocmd FileType html packadd emmet-vim
+
+" [stanangeloff/php.vim]
+autocmd FileType php packadd php.vim
+
+" sensible
+set complete=.
+set completeopt+=menuone
+set listchars=tab:\ \ 
+set list
+set shortmess=lsWIF
+set pumheight=5
+set sessionoptions=tabpages,curdir,help
+set tags=.tags
+set splitright
+set splitbelow
+set fillchars=fold:-
+set tabstop=4
+set shiftwidth=4
+set ttimeoutlen=0
+set ignorecase
+set laststatus=0
+set showtabline=2
+set noswapfile
+set nowritebackup
+set noshowcmd
+set guicursor=
+set noincsearch
+set switchbuf+=useopen,usetab,newtab
+set grepprg=grep\ -n\ --directories=recurse
+let mapleader = ","
+let g:loaded_netrwPlugin = 1
+
+" neovim specific options
+if has("nvim")
+	set shada=!,'0,/10,:100,<0,@1,f0,h,s1
+endif
+
+" colors
+colorscheme solarized
+
+" menu
+command! CmdBufferSearchAndReplace call feedkeys(":%s/foo/bar/gc")
+command! CmdBufferOpenLastClosed tabe #
+command! CmdShowLastErrorMessages messages
+command! CmdFileSolarized tabe ~/.vim/colors/solarized.vim
+
+" map <alt+n> to access tabs
+for n in range(1, 9)
+	execute printf("nnoremap <M-%i> %igt", n, n)
+endfor
+
+" disable search highlightning
+nnoremap <silent><Space> :noh<CR>
+
+" comment/uncomment lines
+nnoremap <silent><C-_> :call commenter#toggle()<CR>
+vnoremap <silent><C-_> :call commenter#toggle()<CR>
+
+" move cursor
+noremap K 5k
+noremap J 5j
+
+" move cursor by display line
+nnoremap <M-j> gj
+nnoremap <M-k> gk
+vnoremap <M-j> gj
+vnoremap <M-k> gk
+
+" double empty line
+nnoremap 2o o<CR>
+nnoremap 2O O<Esc>O
+
+" silent searching
+nnoremap <silent>n n
+nnoremap <silent>N N
+
+" silent undo/redo
+nnoremap <silent>u :silent! undo<CR>
+nnoremap <silent>U :silent! redo<CR>
+
+" open vimrc
+nnoremap <silent><leader>c :silent 0tabe $MYVIMRC<CR>
+
+" useful shortcut for help pages
+nnoremap <F1> :tab help 
+
+" move tab forward/backward
+nnoremap <silent><C-l> :tabm +1<CR>
+nnoremap <silent><C-h> :tabm -1<CR>
+
+" show headers (comments at the beginning of the line)
+nnoremap <silent><leader>h :silent lvimgrep /^\("\\|#\\|\/\/\|\/\*\).\+$/j %<CR>
+
+" show status line
+nnoremap <silent><leader>s :echo printf("%s%s%s", expand("%:p"), &ft == "" ? "" : " [" . &ft . "]", &ro == 1 ? " [RO]" : "")<CR>
+
+" show syntax group under the cursor
+nnoremap <silent><leader>g :call syntax#showGroup()<CR>
+
+" do not select newline character
+vnoremap $ $<Left>
+
+" readline compliance
+inoremap <C-a> <Home>
+inoremap <C-e> <End>
+cnoremap <C-a> <Home>
+
+" fix arrows for cgn command
+inoremap <Left> <C-G>U<Left>
+inoremap <Right> <C-G>U<Right>
+
+" enhance tab
+imap <expr><Tab>
+	\ pumvisible() ? "\<C-n>" :
+	\ !is#pattern('\S\+\%#') ? "\<Tab>" :
+	\ &filetype == "html" && emmet#isExpandable() ? "\<C-y>," :
+	\ "\<C-n>"
+inoremap <S-Tab> <C-p>
+
+" enhance enter
+inoremap <expr><CR>
+	\ is#std('\[\%#', ["vim"]) ? "\<CR>\<CR>\\ ]\<Up>\<Tab>\\ " :
+	\ is#std('{\%#', ["vim"]) ? "\<CR>\<CR>\\ }\<Up>\<Tab>\\ " :
+	\ is#std('\[\%#') ? "\<CR>\<CR>]\<Up>\<Tab>" :
+	\ is#std('{\%#') ? "\<CR>\<CR>}\<Up>\<Tab>" :
+	\ "\<CR>"
+
+" enhance backspace
+inoremap <expr><BS>
+	\ is#std('(\%#)\\|{\%#}\\|\[\%#\]\\|"\%#"\\|''\%#''\\|<\%#>') ? "\<BS>\<Del>" :
+	\ "\<BS>"
+
+" vim
+autocmd FileType vim setlocal textwidth=0
+autocmd BufWritePost ~/.vim/colors/solarized.vim colorscheme solarized
+autocmd BufRead * let &l:modifiable = &readonly == 1 ? 0 : &modifiable
+autocmd InsertLeave * call cursor(0, getpos("'^")[2])
+autocmd BufReadPost * silent! normal! g'.
+
+" qf
+autocmd QuickFixCmdPre grep tabe
+autocmd QuickFixCmdPost grep execute printf("vertical cwindow %i", winwidth(0) / 2)
+autocmd QuickFixCmdPost lvimgrep execute printf("vertical lwindow %i", winwidth(0) / 2)
+
+" system files
+autocmd BufRead ~/.xbindkeysrc setlocal filetype=conf
+autocmd BufWritePost ~/.xbindkeysrc call system("pkill xbindkeys; xbindkeys")
+autocmd BufRead ~/.xinitrc setlocal filetype=sh commentstring=#\ %s
+autocmd BufRead ~/.config/vifm/vifmrc setlocal filetype=vim commentstring=\"\ %s
+autocmd BufRead ~/.config/compton.conf setlocal filetype=conf commentstring=#\ %s
+autocmd BufWritePost ~/.config/compton.conf call system("pkill compton; compton --daemon")
+autocmd BufWritePost ~/.Xresources !xrdb -merge ~/.Xresources
+
+" text
+autocmd BufRead,BufNewFile TODO,*.ml setlocal filetype=ml
+autocmd FileType ml,markdown setlocal textwidth=80 colorcolumn=81
+autocmd FileType ml nnoremap <buffer><silent># :call append(line(".") - 1, repeat("=", 80))<CR>
+
+" php
+autocmd FileType php setlocal matchpairs={:},(:),[:]
+autocmd BufRead ~/www/*/vendor/* setlocal readonly nomodifiable
+
+" html
+autocmd BufNewFile,BufRead *.twig set filetype=html.twig
